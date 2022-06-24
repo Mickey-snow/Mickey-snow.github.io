@@ -90,7 +90,7 @@
 <meta property="og:description" content="We are given a sequence $A$ consists of $k\ (1\leq k\leq 150,000)$ numbers initially. Each _delete operation_ removes all elements $a_i\in A$ that $a_i&#x3D;k$. We can change the value of certain elements">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-02-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-08T03:28:58.000Z">
+<meta property="article:modified_time" content="2022-06-24T08:01:27.332Z">
 <meta property="article:author" content="Mickey-snow">
 <meta property="article:tag" content="Segment Tree">
 <meta name="twitter:card" content="summary">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2022-06-08T11:28:58+08:00">
-                2022-06-08
+              <time title="Post modified" itemprop="dateModified" datetime="2022-06-24T16:01:27+08:00">
+                2022-06-24
               </time>
             
           </span>
@@ -439,7 +439,9 @@
 <li>Add $1$ or minus $1$ to all elements in $A$.</li>
 </ul>
 <p>Calculate the answer as well after each modifications.</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a><a id="more"></a></h2><p>Firstly, let’s consider solving the problem without considering modifications. Imagine $n$ white blocks in a row which the $i$ -th block represents sequence $A$ when it has a length of $i$, after some delete operations probably.</p>
+<a id="more"></a>
+<hr>
+<p>Firstly, let’s consider solving the problem without considering modifications. Imagine $n$ white blocks in a row which the $i$ -th block represents sequence $A$ when it has a length of $i$, after some delete operations probably.</p>
 <p>We are at block No.$n$ at the beginning. If there exists $a(a&gt;0)$ elements with value $n$, we shall move to block $n-a$ after the delete operation applied. As sequence $A$ will become $\varnothing$ in the end, we should go through all blocks from $n$ to $1$ during such process.</p>
 <p>Secondly, consider coloring several blocks black, which indicates that we can go pass this block while deleting. To be specific, if there be $k$ numbers with value $i$, we should color $[i-k+1,\ i]$ black. We can only delete elements from the tail with it’s block colored black, which means several changes might be needed. Since by using the optimal strategy, changing $1$ element adds $1$ black block, the answer should be the number of white blocks.</p>
 <p>Finally, with the modification operation being take under consideration, a segment tree is needed to preserve this sequence. Single element modification is needless to say, obvious, while global adding is equivalent to simply moving the query section.</p>
@@ -555,17 +557,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -645,22 +638,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

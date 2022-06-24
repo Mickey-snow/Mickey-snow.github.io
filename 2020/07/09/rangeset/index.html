@@ -90,7 +90,7 @@
 <meta property="og:description" content="https:&#x2F;&#x2F;atcoder.jp&#x2F;contests&#x2F;agc045&#x2F;tasks&#x2F;agc045_c We are given a string $x$ with length of $N$, and each char of its be 0 initially. There are 2 operations that can be applied to string $x$:  Change $">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-07-08T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-24T07:04:51.807Z">
+<meta property="article:modified_time" content="2022-06-24T08:01:13.949Z">
 <meta property="article:author" content="Mickey-snow">
 <meta property="article:tag" content="Dynamic Programming">
 <meta name="twitter:card" content="summary">
@@ -345,7 +345,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2022-06-24T15:04:51+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2022-06-24T16:01:13+08:00">
                 2022-06-24
               </time>
             
@@ -440,6 +440,7 @@
 <li>Change $B$ continuous chars of $x$ to <code>1</code>.</li>
 </ol>
 <p>Were those operations to be applied without any limitation, calculate the number of different strings that $x$ can be.</p>
+<a id="more"></a>
 <hr>
 <p>Firstly, prove that the answer will not change if we swap $A$ and $B$. If using a sequence of operations can change $x$ into $x^\prime$, we can use the opposite of this sequence to change $x$ reversed to $x^\prime$ reversed, meaning that there is exactly $1$ correspondence for each $x^\prime$ in the reversed case. Therefore, swap the values of $A$ and $B$ will make no differences. Let’s make $A\leq B$.</p>
 <p>Secondly, consider the property of final string $x^\prime$. Were there be more than $B$ <code>1</code>s continuously, $x^\prime$ can be constructed by the following way: starting from the front and tail of $x$, make $x$ and $x^\prime$ the same except this segment using greedy. As $A\leq B$, there should be a gap with length at least $B$, that ensures operation on 2 sides will not affect each other. Operation 2 can then fulfill this sequence with <code>1</code>. Furthermore, if there do not exist such <code>1</code>s in $x^{\prime\prime}$, it should be the result of a above mentioned string $x^\prime$, after operation 1 applied once, changing more than $A$ <code>1</code>s into <code>0</code>.</p>
