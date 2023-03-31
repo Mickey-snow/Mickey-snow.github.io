@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Mickey_snow.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Mickey_snow.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="The Fast Fourier Transform (FFT) is an efficient algorithm for computing the Discrete Fourier Transform (DFT) of a sequence, which is a mathematical transformation that is commonly used in signal proc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Polynomials and the FFT">
+<meta property="og:url" content="https://mickey-snow.github.io/2019/01/04/fft/index.html">
+<meta property="og:site_name" content="Mickey-snow&#39;s Blog">
+<meta property="og:description" content="The Fast Fourier Transform (FFT) is an efficient algorithm for computing the Discrete Fourier Transform (DFT) of a sequence, which is a mathematical transformation that is commonly used in signal proc">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-01-03T15:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-31T05:07:19.446Z">
+<meta property="article:author" content="Mickey-snow">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://mickey-snow.github.io/2019/01/04/fft/"/>
+
+
+
+
+
+  <title>Polynomials and the FFT | Mickey-snow's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mickey-snow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/index.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/index.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/index.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mickey-snow.github.io/2019/01/04/fft/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mickey-snow">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mickey-snow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Polynomials and the FFT</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-04T00:00:00+09:00">
+                2019-01-04
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2023-03-31T14:07:19+09:00">
+                2023-03-31
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Polynomials/" itemprop="url" rel="index">
+                    <span itemprop="name">Polynomials</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.9k character(s)
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  11 minute(s)
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>The <strong>Fast Fourier Transform (FFT)</strong> is an efficient algorithm for computing the <strong>Discrete Fourier Transform (DFT)</strong> of a sequence, which is a mathematical transformation that is commonly used in signal processing to convert a signal from the time domain to the frequency domain. The basic idea behind the FFT is to divide the input sequence into smaller sub-sequences, and then recursively apply the DFT to these sub-sequences until the final DFT is computed, based on the divide-and-conquer strategy. We shall see as an example how FFT computes the convolution of input vectors, in which it shows its efficiency by reducing the computations required from $O(N^2)$ to $O(N\log N)$.</p>
+<a id="more"></a>
+<h1 id="Polynomials"><a href="#Polynomials" class="headerlink" title="Polynomials"></a>Polynomials</h1><p>For polynomial multiplication, if $A(x)$ and $B(x)$ are polynomials of degree-bound $n$, their product $C(x)$ is a polynomial of degree-bound $(2n-1)$ such that $C(x)=A(x)B(x)$. That is, if $A(x)=\sum_{j=0}^{n-1}a_jx^j$ and $B(x)=\sum_{j=0}^{n-1}b_jx^j$, then $C(x)=\sum_{j=0}^{2n-2}c_jx^j$, where $c_j=\sum_{k=0}^ja_kb_{j-k}$.</p>
+<h2 id="Representing-polynomials"><a href="#Representing-polynomials" class="headerlink" title="Representing polynomials"></a>Representing polynomials</h2><p>The coefficient and point-value representations of polynomials are in a sense equivalent. By combining them we can multiply two degree-bound $n$ polynomials in $O(N\log N)$ time.</p>
+<h3 id="Coefficient-representation"><a href="#Coefficient-representation" class="headerlink" title="Coefficient representation"></a>Coefficient representation</h3><p>A <strong>coefficient representation</strong> of a polynomial</p>
+<script type="math/tex; mode=display">
+A(x)=\sum_{j=0}^{n-1}a_jx^j</script><p>of degree-bound $n$ is a vector of coefficients $a=(a_0,a_1,\cdots,a_{n-1})$. While adding two polynomials represented by the coefficient vectors takes $O(N)$ time, the straightforward method of multiplying two degree-bound $n$ polynomials $A(x)$ and $B(x)$ represented in coefficient form takes time $O(N^2)$.</p>
+<h3 id="Point-value-representation"><a href="#Point-value-representation" class="headerlink" title="Point-value representation"></a>Point-value representation</h3><p>A <strong>point-value representation</strong> of a polynomial $A(x)$ of degree-bound $n$ is a set of $n$ point-value pairs</p>
+<script type="math/tex; mode=display">
+\left\{(x_0,y_0),(x_1,y_1),\cdots,(x_{n-1},y_{n-1})\right\}</script><p>such that all of the $x_k$ are distinct and $y_k=A(x_k)$.</p>
+<p>Computing a point-value representation for a polynomial given in coefficient form takes time $O(N^2)$. We shall see, however, if we select $n$ different points $x_k$ cleverly, so that $x_k=\omega_n^k$, we can accelerate this computation to run in time $O(N\log N)$. As well as interpolation-the inverse of evaluation-additionally.</p>
+<p>Given two input polynomials in their point-value representation form, the time to multiply them to obtain the point-value form of the result takes time $O(N)$.</p>
+<h2 id="Multiplication-of-polynomials-in-coefficient-form"><a href="#Multiplication-of-polynomials-in-coefficient-form" class="headerlink" title="Multiplication of polynomials in coefficient form"></a>Multiplication of polynomials in coefficient form</h2><p>The idea is to choose “complex roots of unity” as the evaluation points, allowing us to produce a point-value representation by taking the discrete Fourier transform (DFT) of a coefficient, as well as performing the inverse operation, interpolation, to produce a coefficient representation by taking the inverse DFT of point-value pairs, both within $O(N\log N)$ time. Therefore, since we can perform pointwise multiplication in time $O(N)$, the following procedure for multiplying polynomials given in coefficient form takes $O(N\log N)$ time.</p>
+<h1 id="The-DFT-and-FFT"><a href="#The-DFT-and-FFT" class="headerlink" title="The DFT and FFT"></a>The DFT and FFT</h1><h2 id="Complex-roots-of-unity"><a href="#Complex-roots-of-unity" class="headerlink" title="Complex roots of unity"></a>Complex roots of unity</h2><p>If a complex number $\omega$ satisfies the equation</p>
+<script type="math/tex; mode=display">
+ω^n=1</script><p>then it is called an <strong>complex $n$th root of unity</strong>. There are exactly $n$ distinct complex $n$th roots of unity, which can be expressed as</p>
+<script type="math/tex; mode=display">
+e^{\frac{2\pi ik}{n}}</script><p>for $k=0,1,\cdots,n-1$. Among these roots, $e^{\frac{2\pi i}{n}}$ is called the <strong>principal $n$th complex root</strong> and is denoted by $\omega_n$.</p>
+<h3 id="Cancellation-lemma"><a href="#Cancellation-lemma" class="headerlink" title="Cancellation lemma"></a>Cancellation lemma</h3><script type="math/tex; mode=display">
+\omega_{dn}^{dk}=\omega_n^k</script><p>for any integers $n\ge0$, $k\ge0$, and $d&gt;0$.</p>
+<p>Proof:</p>
+<script type="math/tex; mode=display">
+\omega_{dn}^{dk}=\left(e^{\frac{2\pi i}{dn}}\right)^{dk}=\left(e^{\frac{2\pi i}{n}}\right)^k=\omega_n^k</script><p>Also we have the following corollary</p>
+<script type="math/tex; mode=display">
+\omega_n^{\frac{n}{2}}=\omega_2=-1</script><p>Proof:</p>
+<script type="math/tex; mode=display">
+\omega_n^{\frac{n}{2}}=\left(e^{\frac{2\pi i}{n}}\right)^{\frac{n}{2}}=\left(e^{\pi i}\right)=\omega_2</script><h3 id="Halving-lemma"><a href="#Halving-lemma" class="headerlink" title="Halving lemma"></a>Halving lemma</h3><p>If $n&gt;0$ is even, then the squares of the $n$ complex $n$th roots of unity are the $n/2$ complex $(n/2)$th roots of unity.</p>
+<p>Proof:</p>
+<script type="math/tex; mode=display">
+\left(\omega_n^{k + \frac{n}{2}}\right)^2 = \omega_n^{2k + n} = \omega_n^{2k}\omega_n^n = \omega_n^{2k} = \left(\omega_n^k\right)^2</script><p>Thus, $\omega_n^k$ and $\omega_n^{k+n/2}$ have the same square. This is essential to our divide-and-conquer approach since it guarantees that the recursive subproblems are only half as large.</p>
+<h3 id="Summation-lemma"><a href="#Summation-lemma" class="headerlink" title="Summation lemma"></a>Summation lemma</h3><p>For any integer $n&gt;0$ and nonzero integer $k$ not divisible by $n$,</p>
+<script type="math/tex; mode=display">
+\sum\limits_{j =0}^{n-1}{(w_n^k)^j} = 0</script><p>Proof:</p>
+<script type="math/tex; mode=display">
+\sum\limits_{j =0}^{n-1}{(w_n^k)^j} = \frac{(w_n^k)^n -1}{w_n^k -1} =  \frac{(w_n^n)^k -1}{w_n^k -1} =  \frac{(1)^k -1}{w_n^k -1}</script><h2 id="The-DFT"><a href="#The-DFT" class="headerlink" title="The DFT"></a>The DFT</h2><p>The Fast Fourier Transform (FFT) is based on the divide-and-conquer strategy, which reduces the problem size by half at each step and then combines the results. Throughout this discussion, it is assumed that $n$ is a power of $2$.</p>
+<p>As mentioned earlier, computing the pointwise product $C(x) = A(x)B(x)$ requires $n$ evaluations of the product, resulting in a time complexity of $O(n^2)$. However, if certain special values are used, the time complexity can be reduced to $O(n\log n)$. These special values are a set of vectors</p>
+<script type="math/tex; mode=display">
+(\omega_n^0,\omega_n^1,\omega_n^2,\cdots,\omega_n^{n-1})</script><p>which yield the vector</p>
+<script type="math/tex; mode=display">
+(y_0y^\prime_0,y_1y^\prime_1,y_2y^\prime_2,\cdots,y_{n-1}y^\prime_{n-1})</script><p>where</p>
+<script type="math/tex; mode=display">
+y_i=A(\omega_n^i)=\sum_{j=0}^{n-1}a_j\omega_n^{ij}\\
+y_i^\prime = B(\omega_n^i)=\sum_{j=0}^{n-1}b_j\omega_n^{ij}</script><p>The vector $y=(y_0,\cdots,y_{n-1})$ is the <strong>discrete Fourier transform (DFT)</strong> of the coefficient vector $a=(a_0,\cdots,a_{n-1})$. We also write $y=DFT_n(a)$.</p>
+<h2 id="The-FFT"><a href="#The-FFT" class="headerlink" title="The FFT"></a>The FFT</h2><p>Now let’s consider how to calculate $y_i$. Suppose</p>
+<script type="math/tex; mode=display">
+A(x)=\sum_{i=0}^{n-1}a_ix^i</script><p>Let</p>
+<script type="math/tex; mode=display">
+A_0(x)=\sum_{j=0}^{\frac{n}{2}-1}a_{2j}x^j\\
+A_1(x)=\sum_{j=0}^{\frac{n}{2}-1}a_{2j+1}x^j</script><p>therefore</p>
+<script type="math/tex; mode=display">
+A(x)=A_0(x^2)+xA_1(x^2)</script><p>Substituting $x=\omega_n^k\,(k&lt;\frac n2)$ gives</p>
+<script type="math/tex; mode=display">
+A(\omega_n^k)=A_0\left(\omega_\frac n2^k\right)+\omega_n^kA_1\left(\omega_\frac n2^k\right)</script><p>Substituting $x=\omega_n^{k+\frac n2}\,(k&lt;\frac n2)$ gives</p>
+<script type="math/tex; mode=display">
+A\left(\omega_n^{k+\frac n2}\right)=A_0\left(\omega_n^{2k}\omega_n^n\right)+\omega_n^k\omega_n^\frac n2A_1\left(\omega_n^{2k}\omega_n^n\right)\\
+A\left(\omega_n^{k+\frac n2}\right)=A_0\left(\omega_\frac n2^k\right)-\omega_n^kA_1\left(\omega_\frac n2^k\right)</script><p>These two formulas differ only in one sign, so after obtaining the pointvalue expression of $A_0$ and $A_1$, we can merge them to get $A$ in $O(N)$ time complexity.</p>
+<p>The pointvalue expression of $A_0$ and $A_1$ can be recursively calculated. If $A$ has only one term at some point, we can return directly. In this way, the time complexity of the entire fast Fourier transform process is $O(N\log N)$.</p>
+<h2 id="Interpolation-at-the-complex-roots-of-unity"><a href="#Interpolation-at-the-complex-roots-of-unity" class="headerlink" title="Interpolation at the complex roots of unity"></a>Interpolation at the complex roots of unity</h2><p>After converting to the pointvalue representation, the pointvalue expression of polynomial $C$ can be computed in $O(N)$ time complexity. The <strong>Inversed Fast Fourier Transform</strong> is a method of interpolation that can convert the pointvalue representation back to the coefficient representation in $O(N\log N)$ time complexity.</p>
+<p>By writing the DFT as a matrix equation, we interpolate base on the existence of its inversed matrix $V_n^{-1}$ and the fact that the $(j,k)$ entry of $V_n^{-1}$ be $\omega_n^{-kj}/n$.</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+y_0\\y_1\\\vdots\\y_{n-1}
+\end{bmatrix}=\begin{bmatrix}
+1&1&1&\cdots&1\\
+1&\omega_n&\omega_n^{2}&\cdots&\omega_n^{n-1}\\
+\vdots&\vdots&\vdots&\ddots&\vdots\\
+1&\omega_n^{n-1}&\omega_n^{2(n-1)}&\cdots&\omega_n^{(n-1)^2}
+\end{bmatrix}\cdot\begin{bmatrix}
+a_0\\a_1\\\vdots\\a_{n-1}
+\end{bmatrix}</script><h3 id="Uniqueness-of-an-interpolation-polynomial"><a href="#Uniqueness-of-an-interpolation-polynomial" class="headerlink" title="Uniqueness of an interpolation polynomial"></a>Uniqueness of an interpolation polynomial</h3><p>For any set $\left\{(x_1,y_1),\cdots,(x_{n},y_{n})\right\}$ of $n$ point-value pairs such that all the $x_k$ values are distinct, there is a unique polynomial $A(x)$ of degree-bound $n$ such that $y_k=A(x_k)$.</p>
+<p>Proof. The equation $y_k=A(x_k)$ is equal to the matrix equation</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+1&x_1&x_1^2&\cdots&x_1^{n-1}\\
+1&x_2&x_2^2&\cdots&x_2^{n-1}\\
+\vdots&\vdots&\vdots&\ddots&\vdots\\
+1&x_{n}&x_{n}^2&\cdots&x_{n}^{n-1}
+\end{bmatrix}\begin{bmatrix}
+a_1\\a_2\\\vdots\\a_{n}
+\end{bmatrix}=\begin{bmatrix}
+y_1\\y_2\\\vdots\\y_{n}
+\end{bmatrix}</script><p>The matrix on the left is demoted $V(x_0,\cdots,x_{n-1})$ and is known as Vandermonde matrix. We shall see this matrix has determinant $\prod_{1\leq j&lt;k\leq n-1}(x_k-x_j)$ by induction.</p>
+<p>Let $n=2$ be the order of the Vandermonde matrix</p>
+<script type="math/tex; mode=display">
+A=\begin{bmatrix}
+1&x_1\\1&x_2\end{bmatrix}</script><p>We have</p>
+<script type="math/tex; mode=display">
+detA=x_2-x_1</script><p>Now suppose the claim holds for $n-1$. Let $A$ be a Vandermonde matrix of order $n$.</p>
+<script type="math/tex; mode=display">
+\begin{array}{lcl}detA&=&det\begin{bmatrix}
+1&x_1&x_1^2&\cdots&x_1^{n-1}\\
+1&x_2&x_2^2&\cdots&x_2^{n-1}\\
+\vdots&\vdots&\vdots&\ddots&\vdots\\
+1&x_n&x_n^2&\cdots&x_n^{n-1}
+\end{bmatrix}\\
+&=&det\begin{bmatrix}
+1&x_1&x_1^2&\cdots&x_1^{n-1}\\
+0&x_2-x_1&x_2^2-x_1^2&\cdots&x_2^{n-1}-x_1^{n-1}\\
+\vdots&\vdots&\vdots&\ddots&\vdots\\
+0&x_n-x_1&x_n^2-x_1^2&\cdots&x_n^{n-1}-x_1^{n-1}\end{bmatrix}\\
+&=&det\begin{bmatrix}
+x_2-x_1&x_2^2-x_1^2&\cdots&x_2^{n-1}-x_1^{n-1}\\
+\vdots&\vdots&\ddots&\vdots\\
+x_n-x_1&x_n^2-x_1^2&\cdots&x_n^{n-1}-x_1^{n-1}\end{bmatrix}\\
+&=&det\begin{bmatrix}
+x_2-x_1&0&\cdots&0\\
+0&x_3-x_1&\cdots&0\\
+\vdots&\vdots&\ddots&\vdots\\
+0&0&\cdots&x_n-x_1
+\end{bmatrix}\cdot det\begin{bmatrix}
+1&x_1+x_2&\cdots&\sum_{j=0}^{n-2}x_1^jx_2^{n-2-j}\\
+1&x_1+x_3&\cdots&\sum_{j=0}^{n-2}x_1^jx_3^{n-2-j}\\
+\vdots&\vdots&\ddots&\vdots\\
+1&x_1+x_n&\cdots&\sum_{j=0}^{n-2}x_1^jx_n^{n-2-j}\\
+\end{bmatrix}\\
+&=&\prod_{j=2}^n(x_j-x_1)\,\cdot det\left(\begin{bmatrix}
+1&x_2&x_2^2&\cdots&x_2^{n-2}\\
+1&x_3&x_3^2&\cdots&x_3^{n-2}\\
+\vdots&\vdots&\vdots&\ddots&\vdots\\
+1&x_n&x_n^2&\cdots&x_n^{n-2}
+\end{bmatrix}\begin{bmatrix}
+1&x_1&x_1^2&\cdots&x_1^{n-2}\\
+0&1&x_1&\cdots&x_1^{n-3}\\
+\vdots&\vdots&\vdots&\ddots&\vdots\\
+0&0&0&\cdots&1\\
+\end{bmatrix}\right)\\
+&=&\prod_{j=2}^n(x_j-x_1)\,\cdot det\begin{bmatrix}
+1&x_2&x_2^2&\cdots&x_2^{n-2}\\
+1&x_3&x_3^2&\cdots&x_3^{n-2}\\
+\vdots&\vdots&\vdots&\ddots&\vdots\\
+1&x_n&x_n^2&\cdots&x_n^{n-2}
+\end{bmatrix}
+\end{array}</script><p>and by the inductive hypothesis, we get</p>
+<script type="math/tex; mode=display">
+detA=\prod_{j=2}^n(x_j-x_1)\prod_{2\leq j<k\leq n}(x_k-x_j)=\prod_{1\leq j<k\leq n}(x_k-x_j)</script><p>as desired.</p>
+<p>Since we use $n$ complex $n$th roots of unity that for each $0\leq j\not=k\leq n-1,\,\omega_n^j\not=\omega_n^k$ during evaluation, we have the equivalent Vandermonde matrix $V_n(\omega_0,\cdots,\omega_{n-1})$ invertible.</p>
+<hr>
+<p>Next, we shall see for $j,k=0,1,\cdots,n-1$, the $(j,k)$ entry of $V_n^{-1}$ is $\frac{\omega_n^{-jk}}n$ by showing that $V_n^{-1}V_n=I$.</p>
+<script type="math/tex; mode=display">
+[V_n^{-1}V_n]_{jk}=\sum_{t=0}^{n-1}\frac{\omega_n^{-jt}}n\cdot\omega_n^{kt}=\sum_{t=0}^{n-1}\frac{\omega_n^{t(j-k)}}n=[j=k]</script><hr>
+<p>Given the inversed matrix $V_n^{-1}$, we have that $DFT_n^{-1}(y)$ is given by</p>
+<script type="math/tex; mode=display">
+a_j=\frac1n\sum_{k=0}^{n-1}y_k\omega_n^{-jk}</script><p>By modifying the FFT algorithm to switch roles of $a$ and $y$, replace $\omega_n$ by $\omega_n^{-1}$, and divide each element of the result by $n$, we compute the inverse DFT.</p>
+<div><div class="fold_hider"><div class="close hider_title"> </div></div><div class="fold">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">auto</span> MAXN = (<span class="keyword">int</span>)<span class="number">2e6</span> + <span class="number">500</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> Pi = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Complex</span> &#123;</span></span><br><span class="line">	<span class="keyword">double</span> r, i;</span><br><span class="line">	Complex() &#123; r = i = <span class="number">0</span>; &#125;</span><br><span class="line">	Complex(<span class="keyword">double</span> r, <span class="keyword">double</span> i) : r(r), i(i) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">real</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span>&amp; x)</span> </span>&#123; r = x; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">real</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> r; &#125;</span><br><span class="line">	<span class="keyword">inline</span> Complex <span class="keyword">operator</span> + (<span class="keyword">const</span> Complex&amp; rhs)  <span class="keyword">const</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> Complex(r + rhs.r, i + rhs.i);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">inline</span> Complex <span class="keyword">operator</span> - (<span class="keyword">const</span> Complex&amp; rhs)  <span class="keyword">const</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> Complex(r - rhs.r, i - rhs.i);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">inline</span> Complex <span class="keyword">operator</span> * (<span class="keyword">const</span> Complex&amp; rhs)  <span class="keyword">const</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> Complex(r * rhs.r - i * rhs.i, r * rhs.i + i * rhs.r);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">inline</span> Complex&amp; <span class="keyword">operator</span> /= (<span class="keyword">const</span> <span class="keyword">double</span>&amp; x) &#123;</span><br><span class="line">		r /= x, i /= x; <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">inline</span> Complex&amp; <span class="keyword">operator</span> *= (<span class="keyword">const</span> Complex&amp; rhs) &#123;</span><br><span class="line">		<span class="keyword">return</span> (*<span class="keyword">this</span> = Complex(r * rhs.r - i * rhs.i, r * rhs.i + i * rhs.r));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">inline</span> Complex&amp; <span class="keyword">operator</span> += (<span class="keyword">const</span> Complex&amp; rhs) &#123;</span><br><span class="line">		r += rhs.r, i += rhs.i; <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">inline</span> Complex <span class="title">conj</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> Complex(r, -i);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;a[MAXN],b[MAXN];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FFT</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;limit, Complex *arr, <span class="keyword">const</span> <span class="keyword">short</span>&amp; type)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (limit &lt;= <span class="number">1</span>)<span class="keyword">return</span>;</span><br><span class="line">	Complex *a1 = <span class="keyword">new</span> Complex[limit &gt;&gt; <span class="number">1</span>], *a2 = <span class="keyword">new</span> Complex[limit &gt;&gt; <span class="number">1</span>];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; limit; i += <span class="number">2</span>)a1[i &gt;&gt; <span class="number">1</span>] = arr[i], a2[i &gt;&gt; <span class="number">1</span>] = arr[i + <span class="number">1</span>];</span><br><span class="line">	FFT(limit &gt;&gt; <span class="number">1</span>, a1, type); FFT(limit &gt;&gt; <span class="number">1</span>, a2, type);</span><br><span class="line">	Complex Omega_n = Complex(<span class="built_in">cos</span>(<span class="number">2.0</span>*Pi / limit), type*<span class="built_in">sin</span>(<span class="number">2.0</span>*Pi / limit)), Omega = Complex(<span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; (limit &gt;&gt; <span class="number">1</span>); i++, Omega = Omega * Omega_n) &#123;</span><br><span class="line">		arr[i] = a1[i] + Omega * a2[i];</span><br><span class="line">		arr[i + (limit &gt;&gt; <span class="number">1</span>)] = a1[i] - Omega * a2[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">delete</span>[] a1, a2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n, m, limit = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;n, &amp;m);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; i++)<span class="built_in">scanf</span>(<span class="string">"%lf"</span>, &amp;a[i].r);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= m; i++)<span class="built_in">scanf</span>(<span class="string">"%lf"</span>, &amp;b[i].r);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (limit &lt;= n + m)limit &lt;&lt;= <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	FFT(limit, a, <span class="number">1</span>); FFT(limit, b, <span class="number">1</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= limit; i++)a[i] *= b[i];</span><br><span class="line">	FFT(limit, a, <span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= m + n; i++)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%d "</span>, (<span class="keyword">int</span>)(a[i].r / limit + <span class="number">0.5</span>));</span><br><span class="line">	<span class="built_in">putchar</span>(<span class="string">'\n'</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
+<h1 id="Efficient-FFT-implementations"><a href="#Efficient-FFT-implementations" class="headerlink" title="Efficient FFT implementations"></a>Efficient FFT implementations</h1><h2 id="Butterfly-operation"><a href="#Butterfly-operation" class="headerlink" title="Butterfly operation"></a>Butterfly operation</h2><p>Note that </p>
+<script type="math/tex; mode=display">
+A(\omega_n^k)=A_0\left(\omega_{\frac n2}^k\right)+\omega_n^kA_1\left(\omega_{\frac n2}^k\right)\\
+A\left(\omega_n^{k+\frac n2}\right)=A_0\left(\omega_{\frac n2}^k\right)-\omega_n^kA_1\left(\omega_{\frac n2}^k\right)</script><p>We can store the product $\omega_n^kA_1\left(\omega_{\frac n2}^k\right)$ into $t$.</p>
+<h2 id="Iterative-FFT-implementation"><a href="#Iterative-FFT-implementation" class="headerlink" title="Iterative FFT implementation"></a>Iterative FFT implementation</h2><p>The recursive FFT implementation inevitably consumes additional space and extra computational power. However, this process can also be seen iteratively, as a process of partitioning and merging the original sequence.</p>
+<p>Let the binary representation of an integer $a=\sum_{i\in \mathbb{N}^+}2^i$ be $a=0b\overline{a_1a_2a_3\cdots}$.</p>
+<p>Through observation, it can be found that the element originally located at position $i=0b\overline{a_1a_2\cdots a_m}$ in the sequence reaches position $j=0b\overline{a_ma_{m-1}\cdots a_1}$ at the bottom level of  the recursion. Therefore, we can pre-process an array $r_i$ to record where will the element at position $i$ in the original sequence reach at the bottom level of recursion. The recursive formula for this array is as follows:</p>
+<script type="math/tex; mode=display">
+r_i=(r_{\frac i2}>>1)|\left((i\&1)<<(l-1)\right)</script><p>where $l=\log_2n$.</p>
+<hr>
+<p>Firstly, we shall see that the claim that an element will be reversed under binary representation during recursion process, is correct.</p>
+<p>Suppose there are $M=2^n\,(n=0,1,2,\cdots)$ elements at position $0$ to $2^n-1$ initially. The claim holds for $n=0$, and, by inductive, suppose the claim holds for $M=2^{n-1}$.</p>
+<p>Let $M=2^n$. Elements at position $0,1,2,\cdots,2^n-1$ have their binary represented position $0b\overline{0\cdots00},0b\overline{0\cdots01},0b\overline{0\cdots10},\cdots,0b\overline{1\cdots11}$ respectively. Let’s consider the first recursive call.</p>
+<p>The elements will be divided into the left child, which consists of elements at initial position $0b\overline{0\cdots000}_{n},0b\overline{0\cdots010}_{n},0b\overline{0\cdots100}_{n},\cdots,0b\overline{1\cdots110}_{n}$, and the right child, which consists of elements at initial position $0b\overline{0\cdots001}_{n},0b\overline{0\cdots011}_{n},0b\overline{0\cdots101}_{n},\cdots,0b\overline{1\cdots111}_{n}$.</p>
+<p>Since the relative position in each subtree is, by removing the last binary bit, from $0b\overline{0\cdots00}_{n-1}$ to $0b\overline{1\cdots11}_{n-1}$, according to inductive hypothesis, we have their final relative position in each subtree as those binary representation reversed. And finally, by adding an extra $1$ bit in the front for each elements in the right child, we have such a final arrangement $0b\overline{1\cdots11}\cdots0b\overline{0\cdots00}$ as desired.</p>
+<hr>
+<p>Secondly, we shall see that the formula generates each number’s final position correctly.</p>
+<p>Again, by inductive, $r_0=0$, and suppose the claim holds for $i-1$. We have the binary representation for $i$</p>
+<script type="math/tex; mode=display">
+i=0b\overline{a_1a_2a_3\cdots a_m}\\
+\frac i2=0b\overline{0a_1a_2\cdots a_{m-1}}</script><p>By inductive hypothesis, we get</p>
+<script type="math/tex; mode=display">
+r_{\frac i2}=0b\overline{a_{m-1}a_{m-2}a_{m-3}\cdots0}\\
+r_{\frac i2}>>1=0b\overline{0a_{m-1}a_{m-2}\cdots a_1}\\
+(i\&1)<<l-1=0b\overline{a_m00\cdots0}\\
+(r_{\frac i2}>>1)|\left((i\&1)<<l-1\right)=0b\overline{a_ma_{m-1}a_{m-2}\cdots a_1}</script><p>as desired.</p>
+<hr>
+<p>We see that, by using the FFT and the inverse FFT, we can transform a polynomial of degree-bound $N$ back and forth between its coefficient representation and its point-value representation in time $O(N\log N)$.</p>
+<div><div class="fold_hider"><div class="close hider_title"> </div></div><div class="fold">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Complex</span>&#123;</span></span><br><span class="line">	<span class="keyword">double</span> r,i;</span><br><span class="line">	Complex()&#123; r = i = <span class="number">0</span>; &#125;</span><br><span class="line">	Complex(<span class="keyword">const</span> <span class="keyword">double</span>&amp; ir,<span class="keyword">const</span> <span class="keyword">double</span>&amp; ii) : r(ir),i(ii) &#123;&#125;</span><br><span class="line"></span><br><span class="line">	Complex <span class="keyword">operator</span> + (<span class="keyword">const</span> Complex&amp; a) <span class="keyword">const</span> &#123; <span class="keyword">return</span> Complex(r+a.r,i+a.i); &#125;</span><br><span class="line">	Complex <span class="keyword">operator</span> - (<span class="keyword">const</span> Complex&amp; a) <span class="keyword">const</span> &#123; <span class="keyword">return</span> Complex(r-a.r,i-a.i); &#125;</span><br><span class="line">	Complex <span class="keyword">operator</span> * (<span class="keyword">const</span> Complex&amp; a) <span class="keyword">const</span> &#123; <span class="keyword">return</span> Complex(r*a.r-i*a.i,r*a.i+i*a.r); &#125;</span><br><span class="line">	Complex <span class="keyword">operator</span> / (<span class="keyword">const</span> <span class="keyword">double</span>&amp; a) <span class="keyword">const</span> &#123; <span class="keyword">return</span> Complex(r/a,i/a); &#125;</span><br><span class="line">	Complex&amp; <span class="keyword">operator</span> += (<span class="keyword">const</span> Complex&amp; a)&#123; <span class="keyword">return</span> *<span class="keyword">this</span>=*<span class="keyword">this</span>+a; &#125;</span><br><span class="line">	Complex&amp; <span class="keyword">operator</span> -= (<span class="keyword">const</span> Complex&amp; a)&#123; <span class="keyword">return</span> *<span class="keyword">this</span>=*<span class="keyword">this</span>-a; &#125;</span><br><span class="line">	Complex&amp; <span class="keyword">operator</span> *= (<span class="keyword">const</span> Complex&amp; a)&#123; <span class="keyword">return</span> *<span class="keyword">this</span>=*<span class="keyword">this</span>*a; &#125;</span><br><span class="line">	Complex&amp; <span class="keyword">operator</span> /= (<span class="keyword">const</span> <span class="keyword">double</span>&amp; a)&#123; <span class="keyword">return</span> *<span class="keyword">this</span>=*<span class="keyword">this</span>/a; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">Complex <span class="title">Conj</span><span class="params">(<span class="keyword">void</span>)</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> Complex(r,-i); &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">auto</span> MAXN = (<span class="keyword">int</span>)(<span class="number">5e6</span>+<span class="number">2e5</span>);</span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">auto</span> Pi = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> r[MAXN];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FFT</span><span class="params">(Complex* A,<span class="keyword">int</span> totLevel,<span class="keyword">const</span> <span class="keyword">double</span>&amp; type)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> totNums = <span class="number">1</span>&lt;&lt;totLevel;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;totNums;i++) </span><br><span class="line">		<span class="keyword">if</span>(i&lt;r[i]) <span class="built_in">std</span>::swap(A[i],A[r[i]]);</span><br><span class="line"></span><br><span class="line">	Complex temp;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;totLevel;i++)&#123;</span><br><span class="line">		<span class="keyword">const</span> Complex Omega_n = Complex(<span class="built_in">cos</span>(Pi/(<span class="number">1</span>&lt;&lt;i)),type*<span class="built_in">sin</span>(Pi/(<span class="number">1</span>&lt;&lt;i)));</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;totNums;j+=<span class="number">1</span>&lt;&lt;i+<span class="number">1</span>)&#123;</span><br><span class="line">			Complex Omega = Complex(<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;(<span class="number">1</span>&lt;&lt;i);k++)&#123;</span><br><span class="line">				temp = A[j+k+(<span class="number">1</span>&lt;&lt;i)]*Omega;</span><br><span class="line">				A[j+k+(<span class="number">1</span>&lt;&lt;i)] = A[j+k] - temp; A[j+k] = A[j+k] + temp;</span><br><span class="line">				Omega *= Omega_n;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Complex A[MAXN],B[MAXN];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> totA,totB,tot=<span class="number">1</span>,totLevel=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;totA,&amp;totB);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=totA;i++) <span class="built_in">scanf</span>(<span class="string">"%lf"</span>, &amp;A[i].r);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=totB;i++) <span class="built_in">scanf</span>(<span class="string">"%lf"</span>, &amp;B[i].r);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span>(tot&lt;=totA+totB)&#123; tot&lt;&lt;=<span class="number">1</span>; ++totLevel; &#125;</span><br><span class="line">	assert((<span class="number">1</span>&lt;&lt;totLevel) == tot);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;tot;i++) r[i] = (r[i&gt;&gt;<span class="number">1</span>]&gt;&gt;<span class="number">1</span>)|((i&amp;<span class="number">1</span>)&lt;&lt;totLevel<span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">	FFT(A,totLevel,<span class="number">1.0</span>); FFT(B,totLevel,<span class="number">1.0</span>);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;tot;i++) A[i] *= B[i];</span><br><span class="line">	FFT(A,totLevel,<span class="number">-1.0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=totA+totB;i++) <span class="built_in">printf</span>(<span class="string">"%d "</span>,(<span class="keyword">int</span>)(A[i].r/tot+<span class="number">0.5</span>));</span><br><span class="line">	<span class="built_in">putchar</span>(<span class="string">'\n'</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
+      
+    </div>
+    
+    
+    
+  
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/11/nidemingzi/" rel="next" title="NOI2018 Nide Mingzi">
+                <i class="fa fa-chevron-left"></i> NOI2018 Nide Mingzi
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/17/shanshu/" rel="prev" title="BJOI2019 Shanshu">
+                BJOI2019 Shanshu <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zOTQzNy8xNTk2NA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Mickey-snow" />
+            
+              <p class="site-author-name" itemprop="name">Mickey-snow</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/index.html%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Mickey-snow" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:Mickeysnow1031@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Polynomials"><span class="nav-number">1.</span> <span class="nav-text">Polynomials</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Representing-polynomials"><span class="nav-number">1.1.</span> <span class="nav-text">Representing polynomials</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Coefficient-representation"><span class="nav-number">1.1.1.</span> <span class="nav-text">Coefficient representation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Point-value-representation"><span class="nav-number">1.1.2.</span> <span class="nav-text">Point-value representation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Multiplication-of-polynomials-in-coefficient-form"><span class="nav-number">1.2.</span> <span class="nav-text">Multiplication of polynomials in coefficient form</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-DFT-and-FFT"><span class="nav-number">2.</span> <span class="nav-text">The DFT and FFT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Complex-roots-of-unity"><span class="nav-number">2.1.</span> <span class="nav-text">Complex roots of unity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cancellation-lemma"><span class="nav-number">2.1.1.</span> <span class="nav-text">Cancellation lemma</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Halving-lemma"><span class="nav-number">2.1.2.</span> <span class="nav-text">Halving lemma</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summation-lemma"><span class="nav-number">2.1.3.</span> <span class="nav-text">Summation lemma</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-DFT"><span class="nav-number">2.2.</span> <span class="nav-text">The DFT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-FFT"><span class="nav-number">2.3.</span> <span class="nav-text">The FFT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Interpolation-at-the-complex-roots-of-unity"><span class="nav-number">2.4.</span> <span class="nav-text">Interpolation at the complex roots of unity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Uniqueness-of-an-interpolation-polynomial"><span class="nav-number">2.4.1.</span> <span class="nav-text">Uniqueness of an interpolation polynomial</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Efficient-FFT-implementations"><span class="nav-number">3.</span> <span class="nav-text">Efficient FFT implementations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Butterfly-operation"><span class="nav-number">3.1.</span> <span class="nav-text">Butterfly operation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Iterative-FFT-implementation"><span class="nav-number">3.2.</span> <span class="nav-text">Iterative FFT implementation</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mickey-snow</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">11.5k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('5');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 13701,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
