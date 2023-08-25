@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-Mickey_snow.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-Mickey_snow.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Suffix Tree," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="We are given a string $s$ with length $n\ (1\leq n\leq 5\times 10^5)$ and $q\ (1\leq q\leq 10^5)$ queries. For each query we are given a string $t$ and a segment $[l,r]$, calculate the number of diffe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NOI2018 Nide Mingzi">
+<meta property="og:url" content="https://mickey-snow.github.io/2018/12/11/nidemingzi/index.html">
+<meta property="og:site_name" content="Mickey-snow&#39;s Blog">
+<meta property="og:description" content="We are given a string $s$ with length $n\ (1\leq n\leq 5\times 10^5)$ and $q\ (1\leq q\leq 10^5)$ queries. For each query we are given a string $t$ and a segment $[l,r]$, calculate the number of diffe">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-12-10T15:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-28T02:31:50.786Z">
+<meta property="article:author" content="Mickey-snow">
+<meta property="article:tag" content="Suffix Tree">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://mickey-snow.github.io/2018/12/11/nidemingzi/"/>
+
+
+
+
+
+  <title>NOI2018 Nide Mingzi | Mickey-snow's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Mickey-snow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/index.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/index.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/index.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mickey-snow.github.io/2018/12/11/nidemingzi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mickey-snow">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mickey-snow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">NOI2018 Nide Mingzi</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-11T00:00:00+09:00">
+                2018-12-11
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2022-07-28T11:31:50+09:00">
+                2022-07-28
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Data-Structures/" itemprop="url" rel="index">
+                    <span itemprop="name">Data Structures</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.8k character(s)
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  11 minute(s)
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>We are given a string $s$ with length $n\ (1\leq n\leq 5\times 10^5)$ and $q\ (1\leq q\leq 10^5)$ queries. For each query we are given a string $t$ and a segment $[l,r]$, calculate the number of different substrings of $t$ that are <strong>not</strong> substring of $s_{[l,r]}$. Overall $\sum |t|\leq 10^6$.</p>
+<a id="more"></a>
+<hr>
+<p>Firstly, build a <em>suffix tree</em> $T$ for each query string $t$. If $s$ and $t$ share no common char, the answer should be the number of leaf nodes on $T$. Then, appoint a left endpoint $l$, endeavor to match as much chars as possible only considering $s_{[l\cdots]}$. If $r$ is the furthest we can go, mark all nodes on the path represents $t_{[l,r]}$ on $T$. The final answer is the different nodes unmarked.</p>
+<p>Secondly, while considering queries with $l=1$ and $r=|s|$, match $t$ on suffix tree $S$. Which is, appoint 2 pointers to nodes of $S$ and $T$ respectively, while $t_{[u,v]}$ matched, in order to move the start position to $u+1$, simply move both pointers to their suffix link will do the trick.</p>
+<p>Finally, in the general occasion, while considering $s_{[l\cdots r]}$, nodes cannot be visited unless they are located on a path that can be built using suffixes starting at $[l,r]$. For each node $x$ on the suffix tree, path $t_0\to x$ represents several suffixes’ prefix. As those suffixes are the suffixes represented by the leaf nodes in the subtree $x$, we can build a segment tree for each node $x$ that preserves the suffixes exist in subtree $x$. By constructing the segment trees of each nodes, using the method of persistent segment tree, we can solve this problem querying the possible suffix each time entering the next node.</p>
+<p>Overall time complexity is $O(N\log N+M\log M)$.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">auto</span> INT_32_MAX = <span class="number">100000000</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//SegmentTree</span></span><br><span class="line"><span class="keyword">namespace</span> SegTr&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> range = (<span class="keyword">int</span>)<span class="number">1e6</span>+<span class="number">5</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">        Node* lft,*rgt; <span class="keyword">int</span> ID;</span><br><span class="line">        Node(<span class="keyword">const</span> <span class="keyword">int</span>&amp; iID) : ID(iID) &#123; lft = rgt = <span class="literal">nullptr</span>; &#125;</span><br><span class="line">        ~Node()&#123; <span class="keyword">if</span>(lft!=<span class="literal">nullptr</span>) <span class="keyword">delete</span> lft; <span class="keyword">if</span>(rgt!=<span class="literal">nullptr</span>) <span class="keyword">delete</span> rgt; &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function">Node* <span class="title">Build</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>&amp; targ,<span class="keyword">const</span> <span class="keyword">int</span>&amp; ID)</span></span>&#123;</span><br><span class="line">        Node* ret = <span class="keyword">new</span> Node(ID);</span><br><span class="line">        <span class="keyword">int</span> fr=<span class="number">0</span>,to=range,mid;</span><br><span class="line">        <span class="keyword">for</span>(Node* nowAt=ret;fr&lt;to;)&#123;</span><br><span class="line">            mid = fr+to&gt;&gt;<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(targ&lt;=mid)&#123; nowAt-&gt;lft = <span class="keyword">new</span> Node(ID); nowAt = nowAt-&gt;lft; to = mid; &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123; nowAt-&gt;rgt = <span class="keyword">new</span> Node(ID); nowAt = nowAt-&gt;rgt; fr = mid+<span class="number">1</span>; &#125;</span><br><span class="line">        &#125; <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">Node* <span class="title">Merge</span><span class="params">(Node* a,Node* b,<span class="keyword">const</span> <span class="keyword">int</span>&amp; ID)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(a == <span class="literal">nullptr</span>) <span class="keyword">return</span> b;</span><br><span class="line">        <span class="keyword">if</span>(b == <span class="literal">nullptr</span>) <span class="keyword">return</span> a;</span><br><span class="line">        Node* ret = <span class="keyword">new</span> Node(ID);</span><br><span class="line">        ret-&gt;lft = Merge(a-&gt;lft,b-&gt;lft,ID); ret-&gt;rgt = Merge(a-&gt;rgt,b-&gt;rgt,ID);</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Attend</span><span class="params">(Node*&amp; a,Node* b,<span class="keyword">const</span> <span class="keyword">int</span>&amp; ID)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(a == <span class="literal">nullptr</span>)&#123; a = b; <span class="keyword">return</span>; &#125;</span><br><span class="line">        <span class="keyword">if</span>(b == <span class="literal">nullptr</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(a-&gt;ID != ID)&#123;</span><br><span class="line">            Node* t = <span class="keyword">new</span> Node(ID); t-&gt;lft = a-&gt;lft; t-&gt;rgt = a-&gt;rgt;</span><br><span class="line">            a = t;</span><br><span class="line">        &#125;</span><br><span class="line">        Attend(a-&gt;lft,b-&gt;lft,ID); Attend(a-&gt;rgt,b-&gt;rgt,ID);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">Query</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>&amp; fr,<span class="keyword">const</span> <span class="keyword">int</span>&amp; to,Node* nowAt,<span class="keyword">const</span> <span class="keyword">int</span> nfr=<span class="number">0</span>,<span class="keyword">const</span> <span class="keyword">int</span> nto=range)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nowAt==<span class="literal">nullptr</span> || nfr&gt;nto || nto&lt;fr || to&lt;nfr) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(fr&lt;=nfr &amp;&amp; nto&lt;=to) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(Query(fr,to,nowAt-&gt;lft,nfr,nfr+nto&gt;&gt;<span class="number">1</span>)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span>(Query(fr,to,nowAt-&gt;rgt,<span class="number">1</span>+(nfr+nto&gt;&gt;<span class="number">1</span>),nto)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">auto</span> MAXN = (<span class="keyword">int</span>)<span class="number">5e5</span>+<span class="number">50</span>;</span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">auto</span> MAXM = (<span class="keyword">int</span>)<span class="number">1e6</span>+<span class="number">50</span>;</span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">auto</span> MAXK = <span class="number">28</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Suffix Tree</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> start,len,totLen;</span><br><span class="line">    SegTr::Node* root;</span><br><span class="line">    Node* ch[MAXK],*link;</span><br><span class="line">    Node()&#123; start = len = <span class="number">0</span>; link = <span class="literal">nullptr</span>; root = <span class="literal">nullptr</span>; <span class="built_in">memset</span>(ch,<span class="number">0</span>,<span class="keyword">sizeof</span>(ch));  &#125;</span><br><span class="line">    Node(<span class="keyword">const</span> <span class="keyword">int</span>&amp; istart,<span class="keyword">const</span> <span class="keyword">int</span>&amp; ilen) : start(istart),len(ilen) &#123; link = <span class="literal">nullptr</span>; root = <span class="literal">nullptr</span>; <span class="built_in">memset</span>(ch,<span class="number">0</span>,<span class="keyword">sizeof</span>(ch)); &#125;</span><br><span class="line">    ~Node()&#123;</span><br><span class="line">        <span class="keyword">if</span>(root != <span class="literal">nullptr</span>) <span class="keyword">delete</span> root;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; it : ch) <span class="keyword">if</span>(it != <span class="literal">nullptr</span>) <span class="keyword">delete</span> it;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;*t0,*virt,*nowAt;</span><br><span class="line"><span class="keyword">int</span> s[MAXN],remain,totLen;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Attend</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>&amp; add)</span></span>&#123;</span><br><span class="line">    s[totLen++] = add; ++remain;</span><br><span class="line">    <span class="keyword">for</span>(Node* last=virt,*t; remain;)&#123;</span><br><span class="line">        <span class="keyword">while</span>(nowAt-&gt;ch[s[totLen-remain]]!=<span class="literal">nullptr</span> &amp;&amp; remain&gt;nowAt-&gt;ch[s[totLen-remain]]-&gt;len)&#123;</span><br><span class="line">            t = nowAt-&gt;ch[s[totLen-remain]]; remain -= t-&gt;len; nowAt = t;</span><br><span class="line">        &#125;</span><br><span class="line">        Node*&amp; v = nowAt-&gt;ch[s[totLen-remain]];</span><br><span class="line">        <span class="keyword">int</span> endChar_v = v==<span class="literal">nullptr</span> ? MAXK<span class="number">-1</span> : s[v-&gt;start+remain<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">if</span>(v==<span class="literal">nullptr</span> || endChar_v==add)&#123;</span><br><span class="line">            last-&gt;link = nowAt; last = nowAt;</span><br><span class="line">            <span class="keyword">if</span>(v == <span class="literal">nullptr</span>) v = <span class="keyword">new</span> Node(totLen-remain,INT_32_MAX);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            Node* split = <span class="keyword">new</span> Node(v-&gt;start, remain<span class="number">-1</span>);</span><br><span class="line">            v-&gt;start += remain<span class="number">-1</span>; v-&gt;len -= remain<span class="number">-1</span>;</span><br><span class="line">            split-&gt;ch[endChar_v] = v;</span><br><span class="line">            split-&gt;ch[add] = <span class="keyword">new</span> Node(totLen<span class="number">-1</span>, INT_32_MAX);</span><br><span class="line">            last-&gt;link = v = split; last = split;</span><br><span class="line">        &#125; <span class="keyword">if</span>(nowAt == t0) --remain; <span class="keyword">else</span> nowAt = nowAt-&gt;link;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> dfs_clock;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dfs1</span><span class="params">(Node* nowAt,<span class="keyword">const</span> <span class="keyword">int</span>&amp; sumLen=<span class="number">0</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ch = <span class="number">0</span>; <span class="keyword">const</span> <span class="keyword">int</span> dfn = ++dfs_clock;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it : nowAt-&gt;ch) <span class="keyword">if</span>(it != <span class="literal">nullptr</span>) ++ch;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(ch == <span class="number">0</span>)&#123;</span><br><span class="line">        nowAt-&gt;len = totLen - nowAt-&gt;start;</span><br><span class="line">        nowAt-&gt;totLen = nowAt-&gt;len + sumLen;</span><br><span class="line">        nowAt-&gt;root = SegTr::Build(totLen-nowAt-&gt;totLen,dfn);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    nowAt-&gt;totLen = sumLen+nowAt-&gt;len;</span><br><span class="line">    SegTr::Node* ch1; ch = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it : nowAt-&gt;ch)</span><br><span class="line">        <span class="keyword">if</span>(it != <span class="literal">nullptr</span>)&#123;</span><br><span class="line">            Dfs1(it, nowAt-&gt;totLen);</span><br><span class="line">            <span class="keyword">if</span>(ch == <span class="number">0</span>) ch1 = it-&gt;root;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(ch == <span class="number">1</span>) nowAt-&gt;root = SegTr::Merge(ch1, it-&gt;root,dfn);</span><br><span class="line">            <span class="keyword">else</span> SegTr::Attend(nowAt-&gt;root, it-&gt;root,dfn);</span><br><span class="line">            ++ch;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> ins[MAXM];</span><br><span class="line"><span class="keyword">int</span> insarr[MAXM];</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> CNT&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">        <span class="keyword">int</span> start,len,cov,totLen;</span><br><span class="line">        Node* ch[MAXK],*link;</span><br><span class="line">        Node()&#123; start = len = <span class="number">0</span>; link = <span class="literal">nullptr</span>; cov = <span class="number">-1</span>;  <span class="built_in">memset</span>(ch,<span class="number">0</span>,<span class="keyword">sizeof</span>(ch));  &#125;</span><br><span class="line">        Node(<span class="keyword">const</span> <span class="keyword">int</span>&amp; istart,<span class="keyword">const</span> <span class="keyword">int</span>&amp; ilen) : start(istart),len(ilen) &#123; link = <span class="literal">nullptr</span>; <span class="built_in">memset</span>(ch,<span class="number">0</span>,<span class="keyword">sizeof</span>(ch)); cov = <span class="number">-1</span>; &#125;</span><br><span class="line">        ~Node()&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; it : ch) <span class="keyword">if</span>(it != <span class="literal">nullptr</span>) <span class="keyword">delete</span> it;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;*t0,*virt,*nowAt;</span><br><span class="line">    <span class="keyword">int</span> s[MAXM],totLen,remain; <span class="keyword">int</span> cov;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Attend</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>&amp; add)</span></span>&#123;</span><br><span class="line">        s[totLen++] = add; ++remain;</span><br><span class="line">        <span class="keyword">for</span>(Node* last=virt,*t; remain;)&#123;</span><br><span class="line">            <span class="keyword">while</span>(nowAt-&gt;ch[s[totLen-remain]]!=<span class="literal">nullptr</span> &amp;&amp; remain&gt;nowAt-&gt;ch[s[totLen-remain]]-&gt;len)&#123;</span><br><span class="line">                t = nowAt-&gt;ch[s[totLen-remain]]; remain -= t-&gt;len; nowAt = t;</span><br><span class="line">            &#125;</span><br><span class="line">            Node*&amp; v = nowAt-&gt;ch[s[totLen-remain]]; <span class="keyword">int</span> endChar_v = v==<span class="literal">nullptr</span> ? MAXK<span class="number">-1</span> : s[v-&gt;start+remain<span class="number">-1</span>];</span><br><span class="line">            <span class="keyword">if</span>(v==<span class="literal">nullptr</span> || endChar_v==add)&#123;</span><br><span class="line">                last-&gt;link = nowAt; last = nowAt;</span><br><span class="line">                <span class="keyword">if</span>(v == <span class="literal">nullptr</span>) v = <span class="keyword">new</span> Node(totLen-remain,INT_32_MAX); <span class="keyword">else</span> <span class="keyword">break</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                Node* split = <span class="keyword">new</span> Node(v-&gt;start, remain<span class="number">-1</span>);</span><br><span class="line">                v-&gt;start += remain<span class="number">-1</span>; v-&gt;len -= remain<span class="number">-1</span>;</span><br><span class="line">                split-&gt;ch[endChar_v] = v; split-&gt;ch[add] = <span class="keyword">new</span> Node(totLen<span class="number">-1</span>, INT_32_MAX);</span><br><span class="line">                last-&gt;link = v = split; last = split;</span><br><span class="line">            &#125; <span class="keyword">if</span>(nowAt == t0) --remain; <span class="keyword">else</span> nowAt = nowAt-&gt;link;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> cntans;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">cntDfs</span><span class="params">(Node* nowAt)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it : nowAt-&gt;ch)</span><br><span class="line">            <span class="keyword">if</span>(it!=<span class="literal">nullptr</span>)&#123;</span><br><span class="line">                cntDfs(it);</span><br><span class="line">                <span class="keyword">if</span>(it-&gt;cov != <span class="number">-1</span>) nowAt-&gt;cov = nowAt-&gt;len;</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">if</span>(nowAt-&gt;cov &lt; <span class="number">0</span>) cntans += nowAt-&gt;len;</span><br><span class="line">        <span class="keyword">else</span> cntans += nowAt-&gt;len - nowAt-&gt;cov;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Dfs</span><span class="params">(Node* nowAt,<span class="keyword">const</span> <span class="keyword">int</span>&amp; sumLen=<span class="number">0</span>)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ch = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it : nowAt-&gt;ch) <span class="keyword">if</span>(it != <span class="literal">nullptr</span>) ++ch;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span>(ch == <span class="number">0</span>)&#123;</span><br><span class="line">            nowAt-&gt;len = totLen - nowAt-&gt;start;</span><br><span class="line">            nowAt-&gt;totLen = nowAt-&gt;len + sumLen;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        nowAt-&gt;totLen = sumLen+nowAt-&gt;len;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it : nowAt-&gt;ch)</span><br><span class="line">            <span class="keyword">if</span>(it != <span class="literal">nullptr</span>)</span><br><span class="line">                Dfs(it, nowAt-&gt;totLen);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">Count</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">        cntans = <span class="number">0L</span>L; cntDfs(t0); <span class="keyword">return</span> cntans;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Build</span><span class="params">(<span class="keyword">char</span>* a)</span></span>&#123;</span><br><span class="line">        remain = totLen = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(t0 != <span class="literal">nullptr</span>) <span class="keyword">delete</span> t0;</span><br><span class="line">        t0 = <span class="keyword">new</span> Node(); nowAt = t0; <span class="keyword">if</span>(virt==<span class="literal">nullptr</span>) virt = <span class="keyword">new</span> Node();</span><br><span class="line">        <span class="keyword">for</span>(;*a!=<span class="string">'\0'</span>;++a) Attend(*a-<span class="string">'a'</span>); Attend(MAXK<span class="number">-2</span>);</span><br><span class="line">        t0-&gt;link = t0; Dfs(t0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Main</span></span><br><span class="line"><span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> totQuery,fr,to;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%s%d"</span>, ins,&amp;totQuery);</span><br><span class="line">    t0 = <span class="keyword">new</span> Node(); virt = <span class="keyword">new</span> Node(); nowAt = t0;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">char</span>* it=ins; *it!=<span class="string">'\0'</span>; ++it) Attend(*it-<span class="string">'a'</span>);</span><br><span class="line">    Attend(MAXK<span class="number">-2</span>); t0-&gt;link = t0; Dfs1(t0);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> ans; <span class="keyword">int</span> cov,inslen,totprevlen,delt;</span><br><span class="line">    <span class="keyword">while</span>(totQuery--)&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%s%d%d"</span>, ins,&amp;fr,&amp;to); --fr; --to;</span><br><span class="line">        inslen = <span class="built_in">strlen</span>(ins); CNT::Build(ins);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;inslen;i++) insarr[i] = ins[i]-<span class="string">'a'</span>;</span><br><span class="line">        </span><br><span class="line">        nowAt = t0; cov = <span class="number">0</span>; CNT::nowAt = CNT::t0; CNT::cov = <span class="number">0</span>;</span><br><span class="line">        totprevlen = <span class="number">0</span>; <span class="comment">//nxtchar_pos</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> beg=<span class="number">0</span>;beg&lt;inslen;++beg)&#123;</span><br><span class="line">            <span class="keyword">if</span>(totprevlen &lt; beg)&#123; totprevlen = beg; nowAt = t0; CNT::nowAt = CNT::t0; cov = CNT::cov = <span class="number">0</span>; &#125;</span><br><span class="line">            nowAt = nowAt-&gt;link; cov = totprevlen-nowAt-&gt;totLen-beg;</span><br><span class="line">            CNT::nowAt = CNT::nowAt-&gt;link; CNT::cov = totprevlen-CNT::nowAt-&gt;totLen-beg;</span><br><span class="line">            <span class="keyword">while</span>(cov&gt;<span class="number">0</span> &amp;&amp; cov&gt;=nowAt-&gt;ch[insarr[totprevlen-cov]]-&gt;len)&#123;</span><br><span class="line">                delt = nowAt-&gt;ch[insarr[totprevlen-cov]]-&gt;len;</span><br><span class="line">                nowAt = nowAt-&gt;ch[insarr[totprevlen-cov]];</span><br><span class="line">                cov -= delt;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">while</span>(CNT::cov&gt;<span class="number">0</span> &amp;&amp; CNT::cov&gt;=CNT::nowAt-&gt;ch[insarr[totprevlen-CNT::cov]]-&gt;len)&#123;</span><br><span class="line">                delt = CNT::nowAt-&gt;ch[insarr[totprevlen-CNT::cov]]-&gt;len;</span><br><span class="line">                CNT::nowAt = CNT::nowAt-&gt;ch[insarr[totprevlen-CNT::cov]];</span><br><span class="line">                CNT::cov -= delt;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span>(totprevlen&lt;inslen &amp;&amp; (cov&gt;<span class="number">0</span> || nowAt-&gt;ch[insarr[totprevlen]]!=<span class="literal">nullptr</span>) &amp;&amp; SegTr::Query(fr,to-totprevlen+beg,nowAt-&gt;ch[insarr[totprevlen-cov]]-&gt;root) &amp;&amp; s[nowAt-&gt;ch[insarr[totprevlen-cov]]-&gt;start+cov]==insarr[totprevlen])&#123;</span><br><span class="line">                ++cov; ++CNT::cov; ++totprevlen;</span><br><span class="line">                <span class="keyword">while</span>(cov&gt;<span class="number">0</span> &amp;&amp; cov&gt;=nowAt-&gt;ch[insarr[totprevlen-cov]]-&gt;len)&#123;</span><br><span class="line">                    delt = nowAt-&gt;ch[insarr[totprevlen-cov]]-&gt;len;</span><br><span class="line">                    nowAt = nowAt-&gt;ch[insarr[totprevlen-cov]];</span><br><span class="line">                    cov -= delt;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">while</span>(CNT::cov&gt;<span class="number">0</span> &amp;&amp; CNT::cov&gt;=CNT::nowAt-&gt;ch[insarr[totprevlen-CNT::cov]]-&gt;len)&#123;</span><br><span class="line">                    delt = CNT::nowAt-&gt;ch[insarr[totprevlen-CNT::cov]]-&gt;len;</span><br><span class="line">                    CNT::nowAt = CNT::nowAt-&gt;ch[insarr[totprevlen-CNT::cov]];</span><br><span class="line">                    CNT::cov -= delt;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(CNT::cov == <span class="number">0</span>) CNT::nowAt-&gt;cov = CNT::nowAt-&gt;len;</span><br><span class="line">            <span class="keyword">else</span> CNT::nowAt-&gt;ch[insarr[totprevlen-CNT::cov]]-&gt;cov = <span class="built_in">std</span>::max(CNT::nowAt-&gt;ch[insarr[totprevlen-CNT::cov]]-&gt;cov, CNT::cov);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%lld\n"</span>, CNT::Count()-inslen<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+  
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Suffix-Tree/" rel="tag"># Suffix Tree</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/04/fft/" rel="prev" title="Polynomials and the FFT">
+                Polynomials and the FFT <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Mickey-snow" />
+            
+              <p class="site-author-name" itemprop="name">Mickey-snow</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/index.html%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Mickey-snow" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:Mickeysnow1031@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mickey-snow</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">11.5k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('5');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 13701,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
