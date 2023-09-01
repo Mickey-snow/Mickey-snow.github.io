@@ -82,15 +82,15 @@
 
 
 
-<meta name="description" content="We are given a graph $G$ contains $N$ vertices connected by $M$ edges, weighted and colored with either black or white.  Find it’s minimum spanning tree that consists exactly $K$ black edges.">
+<meta name="description" content="We’re given a connected graph $G$ with $N$ vertices and $M$ edges. Each edge is weighted and colored with either black or white.  Find the minimum spanning tree that contains exactly $K$ black edges.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="APIO2008 Roads">
 <meta property="og:url" content="https://mickey-snow.github.io/2022/05/07/roads/index.html">
 <meta property="og:site_name" content="Mickey-snow&#39;s Blog">
-<meta property="og:description" content="We are given a graph $G$ contains $N$ vertices connected by $M$ edges, weighted and colored with either black or white.  Find it’s minimum spanning tree that consists exactly $K$ black edges.">
+<meta property="og:description" content="We’re given a connected graph $G$ with $N$ vertices and $M$ edges. Each edge is weighted and colored with either black or white.  Find the minimum spanning tree that contains exactly $K$ black edges.">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-05-06T15:00:00.000Z">
-<meta property="article:modified_time" content="2022-07-28T02:31:50.783Z">
+<meta property="article:modified_time" content="2023-09-01T16:02:00.055Z">
 <meta property="article:author" content="Mickey-snow">
 <meta property="article:tag" content="Spanning Tree">
 <meta name="twitter:card" content="summary">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2022-07-28T11:31:50+09:00">
-                2022-07-28
+              <time title="Post modified" itemprop="dateModified" datetime="2023-09-02T01:02:00+09:00">
+                2023-09-02
               </time>
             
           </span>
@@ -395,7 +395,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  466 character(s)
+                  498 character(s)
                 </span>
               
 
@@ -411,7 +411,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2 minute(s)
+                  3 minute(s)
                 </span>
               
             </div>
@@ -432,15 +432,15 @@
       
 
       
-        <p>We are given a graph $G$ contains $N$ vertices connected by $M$ edges, weighted and colored with either black or white.  Find it’s minimum spanning tree that consists exactly $K$ black edges.</p>
+        <p>We’re given a connected graph $G$ with $N$ vertices and $M$ edges. Each edge is weighted and colored with either black or white.  Find the minimum spanning tree that contains exactly $K$ black edges.</p>
 <a id="more"></a>
 <hr>
-<p>Consider firstly that in some occasions there is no solution to this problem.</p>
+<p>First, note that the problem has no solution in the following cases:</p>
 <ul>
-<li>$G$ is not connected.</li>
-<li>More than $K$ black edges are indispensable forming the tree. (They can be located using the Kruskal’s algorithm.)</li>
+<li>The graph $G$ is not connected.</li>
+<li>Building any tree from the graph requires more than $K$ black edges. (These can be identified using Kruskal’s algorithm.)</li>
 </ul>
-<p>Otherwise, after selecting all indispensable edges, let the rest of them be divided by color and sorted by weight. Fill in black edges until the number reaches $K$, and select white edges to make it a tree eventually.</p>
+<p>Otherwise there is a solution that can be found in the following way. Once we locate and select all edges that’s definately required to form a tree, divide the remaining edges by color and sort them by weight. Add black edges until their count reaches $K$, then greedly include white edges to complete the tree, as we would normally do in the Kruskal’s algorithm.</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">auto</span> MAXN = <span class="number">20050</span>;</span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">auto</span> MAXM = <span class="number">100050</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Mqs</span></span><br><span class="line"><span class="keyword">int</span> up[MAXN],scale,sets;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Init</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=scale;++i) up[i] = i;</span><br><span class="line">    sets = scale;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Top</span><span class="params">(<span class="keyword">int</span> a)</span></span>&#123; <span class="keyword">return</span> up[a]==a ? a : (up[a]=Top(up[a])); &#125;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Merge</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    a = Top(a); b = Top(b);</span><br><span class="line">    <span class="keyword">if</span>(a==b) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    up[a] = b; --sets; <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Rd</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> u,v; <span class="keyword">bool</span> mark;</span><br><span class="line">    Rd()&#123;&#125;</span><br><span class="line">    Rd(<span class="keyword">const</span> <span class="keyword">int</span>&amp; iu,<span class="keyword">const</span> <span class="keyword">int</span>&amp; iv):u(iu),v(iv) &#123; mark=<span class="literal">false</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Rd&gt; pub,cem;</span><br><span class="line">                                 </span><br><span class="line"><span class="function"><span class="keyword">signed</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> totRd,u,v,pubNum,type;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>, &amp;scale,&amp;totRd,&amp;pubNum); Init();</span><br><span class="line">    <span class="keyword">while</span>(totRd--)&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>, &amp;u,&amp;v,&amp;type);</span><br><span class="line">        <span class="keyword">if</span>(type)&#123; cem.push_back(Rd(u,v)); Merge(u,v); &#125;</span><br><span class="line">        <span class="keyword">else</span> pub.push_back(Rd(u,v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; it:pub)</span><br><span class="line">        <span class="keyword">if</span>(Merge(it.u,it.v))&#123; ++cnt; it.mark=<span class="literal">true</span>; &#125;</span><br><span class="line">    <span class="keyword">if</span>(cnt&gt;pubNum || sets&gt;<span class="number">1</span> || pub.size()&lt;pubNum)&#123; <span class="built_in">puts</span>(<span class="string">"no solution"</span>); <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line"></span><br><span class="line">    Init(); cnt=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it:pub) Merge(it.u,it.v);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; it:cem)</span><br><span class="line">        <span class="keyword">if</span>(Merge(it.u,it.v))&#123; ++cnt; it.mark=<span class="literal">true</span>; &#125;</span><br><span class="line">    <span class="keyword">if</span>(cnt &gt; scale<span class="number">-1</span>-pubNum)&#123; <span class="built_in">puts</span>(<span class="string">"no solution"</span>); <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line"></span><br><span class="line">    Init(); cnt=pubNum;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it:pub) <span class="keyword">if</span>(it.mark)&#123; Merge(it.u,it.v); --cnt; <span class="built_in">printf</span>(<span class="string">"%d %d 0\n"</span>, it.u,it.v); &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it:cem) <span class="keyword">if</span>(it.mark)&#123; Merge(it.u,it.v); <span class="built_in">printf</span>(<span class="string">"%d %d 1\n"</span>, it.u,it.v); &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it:pub)</span><br><span class="line">        <span class="keyword">if</span>(!cnt) <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(Merge(it.u,it.v))&#123; --cnt; <span class="built_in">printf</span>(<span class="string">"%d %d 0\n"</span>, it.u,it.v); &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; it:cem) <span class="keyword">if</span>(Merge(it.u,it.v)) <span class="built_in">printf</span>(<span class="string">"%d %d 1\n"</span>, it.u,it.v);</span><br><span class="line">    assert(sets==<span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
